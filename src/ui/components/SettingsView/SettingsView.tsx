@@ -1,8 +1,10 @@
-import { Box, Tabs } from '@rocket.chat/fuselage';
+import { Button, Box, Tabs } from '@rocket.chat/fuselage';
 import '@rocket.chat/fuselage-polyfills';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { DOWNLOADS_BACK_BUTTON_CLICKED } from '../../actions';
+import { dispatch } from '../../../store';
 
 import type { RootState } from '../../../store/rootReducer';
 import { CertificatesTab } from './CertificatesTab';
@@ -16,12 +18,21 @@ export const SettingsView = () => {
 
   const [currentTab, setCurrentTab] = useState('general');
 
+  const lastSelectedServerUrl = useSelector(
+    ({ lastSelectedServerUrl }: RootState) => lastSelectedServerUrl
+  );
+
+  const handleBackSettingsClick = (): void => {
+    dispatch({ type: DOWNLOADS_BACK_BUTTON_CLICKED, payload: lastSelectedServerUrl });
+  };
+
   return (
     <Box
       display={isVisible ? 'flex' : 'none'}
       flexDirection='column'
       height='full'
       backgroundColor='light'
+      justifyContent='space-between'
     >
       <Box
         width='full'
@@ -31,8 +42,18 @@ export const SettingsView = () => {
         flexWrap='nowrap'
         color='default'
         fontScale='h1'
+        justifyContent='space-between'
       >
-        {t('settings.title')}
+        <Box is='div' color='default' fontScale='h1'>
+          {t('settings.title')}
+        </Box>
+        <Button
+          type='submit'
+          primary
+          onClick={handleBackSettingsClick}
+          >
+            Back
+        </Button>
       </Box>
 
       <Tabs>

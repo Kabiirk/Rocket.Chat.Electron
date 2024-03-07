@@ -22,6 +22,11 @@ import {
   SERVER_URL_RESOLVED,
   SERVER_URL_RESOLUTION_REQUESTED,
 } from '../../../servers/actions';
+
+import {
+  SIDE_BAR_ADD_NEW_SERVER_CLICKED
+} from '../../actions'
+
 import { ServerUrlResolutionStatus } from '../../../servers/common';
 import { request } from '../../../store';
 import type { RootAction } from '../../../store/actions';
@@ -127,6 +132,14 @@ export const AddServerView = () => {
     await resolveServerUrl(trimmedInput);
   };
 
+  const lastSelectedServerUrl = useSelector(
+    ({ lastSelectedServerUrl }: RootState) => lastSelectedServerUrl
+  );
+
+  const handleAddServerBackClick = (): void => {
+    dispatch({ type: SIDE_BAR_ADD_NEW_SERVER_CLICKED, payload: lastSelectedServerUrl });
+  };
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     editInput(event.currentTarget.value);
   };
@@ -195,6 +208,14 @@ export const AddServerView = () => {
                   (validationState === 'validating' &&
                     t('landing.validating')) ||
                   (validationState === 'invalid' && t('landing.invalidUrl'))}
+              </Button>
+              <Button
+                type='submit'
+                primary
+                disabled={validationState !== 'idle'}
+                onClick={handleAddServerBackClick}
+              >
+                {(validationState === 'idle' && t('Back'))}
               </Button>
             </ButtonGroup>
           </FieldGroup>

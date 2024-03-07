@@ -1,4 +1,5 @@
 import {
+  Button,
   Box,
   SearchInput,
   Icon,
@@ -124,6 +125,10 @@ const DownloadsManagerView = () => {
     setStatusFilter('');
   }, [setSearchFilter, setMimeTypeFilter, setServerFilter, setStatusFilter]);
 
+  const handleBackDownloadsClick = (): void => {
+    dispatch({ type: DOWNLOADS_BACK_BUTTON_CLICKED, payload: lastSelectedServerUrl });
+  };
+
   const [itemsPerPage, setItemsPerPage] = useState<25 | 50 | 100>(25);
   const [currentPagination, setCurrentPagination] = useState(0);
 
@@ -191,6 +196,7 @@ const DownloadsManagerView = () => {
         flexDirection='row'
         flexWrap='nowrap'
         alignItems='center'
+        justifyContent='space-between'
       >
         {!isSideBarEnabled && (
           <IconButton icon='arrow-back' onClick={handleBackButton} />
@@ -198,6 +204,13 @@ const DownloadsManagerView = () => {
         <Box is='div' color='default' fontScale='h1'>
           {t('downloads.title')}
         </Box>
+        <Button
+          type='submit'
+          primary
+          onClick={handleBackDownloadsClick}
+          >
+            Back
+        </Button>
       </Box>
       <Box
         display='flex'
